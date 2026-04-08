@@ -27,7 +27,7 @@ export default function Settings() {
     if (user) {
       setFormData({ name: user.name, email: user.email, language: user.language || 'en' });
       // Fetch user's workspace to get default columns
-      fetch('http://localhost:3000/api/workspaces', { headers: { 'Authorization': `Bearer ${token}` }})
+      fetch('https://quickteam.onrender.com/api/workspaces', { headers: { 'Authorization': `Bearer ${token}` }})
         .then(r => r.json())
         .then(wsList => {
           if (wsList && wsList.length > 0) {
@@ -61,7 +61,7 @@ export default function Settings() {
     setColLoading(true);
     setColMsg({ type: '', text: '' });
     try {
-      const res = await fetch(`http://localhost:3000/api/workspaces/${workspaceId}/columns`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/workspaces/${workspaceId}/columns`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ defaultColumns: columns })

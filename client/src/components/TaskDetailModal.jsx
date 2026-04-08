@@ -41,7 +41,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
       }
 
       setLoading(true);
-      fetch(`http://localhost:3000/api/tasks/${task.id}/details`, {
+      fetch(`https://quickteam.onrender.com/api/tasks/${task.id}/details`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => res.json())
@@ -70,7 +70,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
     };
 
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/${task.id}`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/tasks/${task.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
     if (!newComment.trim()) return;
 
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/${task.id}/comments`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/tasks/${task.id}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ content: newComment })

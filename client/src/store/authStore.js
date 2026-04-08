@@ -17,7 +17,7 @@ export const useAuthStore = create((set) => ({
 
   updateProfile: async (token, userData) => {
     try {
-      const res = await fetch('http://localhost:3000/api/auth/me', {
+      const res = await fetch('https://quickteam.onrender.com/api/auth/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

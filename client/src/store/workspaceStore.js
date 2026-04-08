@@ -9,7 +9,7 @@ export const useWorkspaceStore = create((set, get) => ({
   fetchProjects: async (token) => {
     set({ loading: true });
     try {
-      const res = await fetch('http://localhost:3000/api/workspaces/my-projects', {
+      const res = await fetch('https://quickteam.onrender.com/api/workspaces/my-projects', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Failed to fetch projects');
@@ -28,7 +28,7 @@ export const useWorkspaceStore = create((set, get) => ({
   },
 
   createProject: async (token, name) => {
-    const res = await fetch('http://localhost:3000/api/workspaces/my-projects', {
+    const res = await fetch('https://quickteam.onrender.com/api/workspaces/my-projects', {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const useWorkspaceStore = create((set, get) => ({
     const wsId = get().defaultWorkspaceId;
     if (!wsId) return { success: false, error: 'No workspace' };
     try {
-      const res = await fetch(`http://localhost:3000/api/workspaces/${wsId}/members`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/workspaces/${wsId}/members`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export const useWorkspaceStore = create((set, get) => ({
     const wsId = get().defaultWorkspaceId;
     if (!wsId) return { success: false };
     try {
-      const res = await fetch(`http://localhost:3000/api/workspaces/${wsId}/members/${memberId}`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/workspaces/${wsId}/members/${memberId}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export const useWorkspaceStore = create((set, get) => ({
     const wsId = get().defaultWorkspaceId;
     if (!wsId) return { success: false };
     try {
-      const res = await fetch(`http://localhost:3000/api/workspaces/${wsId}/members/${memberId}`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/workspaces/${wsId}/members/${memberId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

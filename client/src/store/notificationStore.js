@@ -6,7 +6,7 @@ export const useNotificationStore = create((set, get) => ({
   
   fetchNotifications: async (token) => {
     try {
-      const res = await fetch('http://localhost:3000/api/notifications', {
+      const res = await fetch('https://quickteam.onrender.com/api/notifications', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) return;
@@ -27,7 +27,7 @@ export const useNotificationStore = create((set, get) => ({
         const updated = state.notifications.map(n => n.id === id ? { ...n, isRead: true } : n);
         return { notifications: updated, unreadCount: updated.filter(n => !n.isRead).length };
       });
-      await fetch(`http://localhost:3000/api/notifications/${id}/read`, {
+      await fetch(`https://quickteam.onrender.com/api/notifications/${id}/read`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });

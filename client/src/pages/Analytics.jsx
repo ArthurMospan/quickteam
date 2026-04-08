@@ -18,7 +18,7 @@ export default function Analytics() {
   }, [workspaces.length, fetchWorkspaces, token]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/projects/${projectId}/analytics`, {
+    fetch(`https://quickteam.onrender.com/api/projects/${projectId}/analytics`, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
     .then(res => res.json())

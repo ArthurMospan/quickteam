@@ -17,7 +17,7 @@ export const useBoardStore = create((set, get) => ({
   fetchBoard: async (projectId, token) => {
     set({ loading: true });
     try {
-      const res = await fetch(`http://localhost:3000/api/projects/${projectId}/board`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/projects/${projectId}/board`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Failed to fetch board');
@@ -32,7 +32,7 @@ export const useBoardStore = create((set, get) => ({
   fetchGlobalBoard: async (token) => {
     set({ loading: true });
     try {
-      const res = await fetch('http://localhost:3000/api/workspaces/global-board', {
+      const res = await fetch('https://quickteam.onrender.com/api/workspaces/global-board', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Failed to fetch global board');
@@ -73,7 +73,7 @@ export const useBoardStore = create((set, get) => ({
     }));
 
     try {
-      const res = await fetch(`http://localhost:3000/api/tasks/${taskId}/move`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/tasks/${taskId}/move`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export const useBoardStore = create((set, get) => ({
 
   createTask: async (taskData, token) => {
     try {
-      const res = await fetch('http://localhost:3000/api/tasks', {
+      const res = await fetch('https://quickteam.onrender.com/api/tasks', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ export const useBoardStore = create((set, get) => ({
 
   createColumn: async (projectId, title, token) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/projects/${projectId}/columns`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/projects/${projectId}/columns`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ title })
@@ -129,7 +129,7 @@ export const useBoardStore = create((set, get) => ({
 
   renameColumn: async (projectId, colId, title, token) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/projects/${projectId}/columns/${colId}`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/projects/${projectId}/columns/${colId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ title })
@@ -144,7 +144,7 @@ export const useBoardStore = create((set, get) => ({
 
   deleteColumn: async (projectId, colId, token) => {
     try {
-      const res = await fetch(`http://localhost:3000/api/projects/${projectId}/columns/${colId}`, {
+      const res = await fetch(`https://quickteam.onrender.com/api/projects/${projectId}/columns/${colId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

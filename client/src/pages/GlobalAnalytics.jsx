@@ -35,7 +35,7 @@ export default function GlobalAnalytics() {
     if (projects.length > 0 && token) {
       Promise.all(
         projects.map(p =>
-          fetch(`http://localhost:3000/api/projects/${p.id}/analytics`, {
+          fetch(`https://quickteam.onrender.com/api/projects/${p.id}/analytics`, {
             headers: { 'Authorization': `Bearer ${token}` }
           }).then(r => r.json()).then(d => ({ ...d, projectName: p.name, projectId: p.id }))
         )

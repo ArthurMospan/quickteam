@@ -42,7 +42,7 @@ export default function Board() {
   useEffect(() => {
     if (activeTab === 'analytics' && token && projectId) {
       setAnalyticsLoading(true);
-      fetch(`http://localhost:3000/api/projects/${projectId}/analytics`, {
+      fetch(`https://quickteam.onrender.com/api/projects/${projectId}/analytics`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
         .then(res => res.json())
