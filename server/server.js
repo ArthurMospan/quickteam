@@ -8,7 +8,7 @@ const taskRoutes = require('./routes/tasks');
 const notificationRoutes = require('./routes/notifications');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
