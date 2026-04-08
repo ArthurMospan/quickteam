@@ -19,10 +19,12 @@ model User {
   createdAt DateTime @default(now())
   
   workspaces WorkspaceMember[]
+  projectRoles ProjectMember[]
   comments   Comment[]
   activities Activity[]
   assignedTasks TaskAssignee[]
   tasks      Task[]   @relation("TaskAssigneeRelation")
+  reportedTasks Task[] @relation("TaskReporterRelation")
   notifications Notification[]
 }
 
@@ -52,12 +54,27 @@ model WorkspaceMember {
 model Project {
   id          String   @id @default(uuid())
   name        String
+  key         String   @default("QT")
+  taskCount   Int      @default(0)
   workspaceId String
   createdAt   DateTime @default(now())
 
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   columns     Column[]
   tags        ProjectTag[]
+  members     ProjectMember[]
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  userId    String
+  projectId String
+  role      String   @default("VIEWER") // LEAD, ASSIGNEE, VIEWER
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
 }
 
 model Column {
@@ -65,6 +82,7 @@ model Column {
   title     String
   order     Int
   projectId String
+  wipLimit  Int?
 
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   tasks     Task[]
@@ -72,11 +90,14 @@ model Column {
 
 model Task {
   id          String   @id @default(uuid())
+  taskKey     String   @default("TMP-1")
   title       String
   description String?
+  type        String   @default("Task") // Epic, Task, Bug, Subtask
   color       String   @default("white")
   hasBookmark Boolean  @default(false)
   priority    String   @default("Medium")
+  storyPoints Int?
   deadline    DateTime?
   order       Int
   createdAt   DateTime @default(now())
@@ -86,6 +107,9 @@ model Task {
   
   assigneeId  String?
   assignee    User?     @relation("TaskAssigneeRelation", fields: [assigneeId], references: [id])
+  
+  reporterId  String?
+  reporter    User?     @relation("TaskReporterRelation", fields: [reporterId], references: [id])
 
   comments    Comment[]
   activities  Activity[]
