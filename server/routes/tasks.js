@@ -27,6 +27,7 @@ router.get('/me', async (req, res) => {
 });
 
 // Create Task
+router.post('/', async (req, res) => {
   try {
     const { title, color, columnId, priority, deadline, assigneeId, type, storyPoints } = req.body;
     
