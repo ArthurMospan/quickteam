@@ -15,6 +15,8 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
   const [priority, setPriority] = useState(task?.priority || 'Medium');
   const [deadline, setDeadline] = useState(task?.deadline ? new Date(task.deadline).toISOString().split('T')[0] : '');
   const [assigneeId, setAssigneeId] = useState(task?.assigneeId || task?.assignees?.[0]?.id || null);
+  const [type, setType] = useState(task?.type || 'Task');
+  const [storyPoints, setStoryPoints] = useState(task?.storyPoints || '');
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -35,6 +37,8 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
       setPriority(task.priority || 'Medium');
       setDeadline(task.deadline ? new Date(task.deadline).toISOString().split('T')[0] : '');
       setAssigneeId(task?.assigneeId || task?.assignees?.[0]?.id || null);
+      setType(task.type || 'Task');
+      setStoryPoints(task.storyPoints || '');
       
       if (editor && task.description !== editor.getHTML()) {
         editor.commands.setContent(task.description || '');
@@ -66,7 +70,9 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
       description,
       priority,
       deadline: deadline || null,
-      assigneeId
+      assigneeId,
+      type,
+      storyPoints: storyPoints === '' ? null : parseInt(storyPoints)
     };
 
     try {
@@ -85,6 +91,8 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
           priority: updatedTask.priority,
           deadline: updatedTask.deadline,
           assigneeId: updatedTask.assigneeId,
+          type: updatedTask.type,
+          storyPoints: updatedTask.storyPoints,
           assignees: updatedTask.assignees?.map(a => a.user) || []
         });
       }
@@ -138,6 +146,7 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
             <div className="flex items-center gap-3 text-xs text-gray-400 font-medium mb-1">
               {task.projectName && <span className="uppercase tracking-wider">{task.projectName}</span>}
               {task.projectName && <span>›</span>}
+              <span className="font-bold text-black bg-gray-200 px-2 py-0.5 rounded-md mx-1">{task.taskKey || 'TASK'}</span>
               <span>{stateLabel}</span>
             </div>
             <h2 className="text-xl font-bold tracking-tight text-gray-900 truncate">{task.title}</h2>
@@ -167,7 +176,13 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
                 )}
               </div>
             </div>
-
+            <div className="mb-8">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Attachments</h3>
+              <div className="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-gray-50 transition-colors cursor-pointer group">
+                  <p className="text-sm text-gray-500 font-medium group-hover:text-black transition-colors">Drag & drop files here to attach</p>
+                  <p className="text-xs text-gray-400 mt-1">or click to browse</p>
+              </div>
+            </div>
             <div className="min-h-[250px]">
               <div className="flex items-center gap-6 border-b border-gray-100 pb-3 mb-6">
                 <button 
@@ -266,6 +281,37 @@ export default function TaskDetailModal({ task, isOpen, onClose, token, onUpdate
                   <option value="Medium">🟣 Medium</option>
                   <option value="Low">⚪ Low</option>
                 </select>
+              </div>
+
+              {/* Task Type */}
+              <div>
+                <h4 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Type</h4>
+                <select 
+                  value={type} 
+                  onChange={(e) => {
+                    setType(e.target.value);
+                    setTimeout(() => handleSaveDetails('type'), 0);
+                  }}
+                  className="w-full text-sm font-semibold px-3 py-2 rounded-xl border bg-white focus:outline-none appearance-none cursor-pointer transition-colors"
+                >
+                  <option value="Epic">🚀 Epic</option>
+                  <option value="Task">☑️ Task</option>
+                  <option value="Bug">🐛 Bug</option>
+                  <option value="Subtask">📋 Subtask</option>
+                </select>
+              </div>
+
+              {/* Story Points */}
+              <div>
+                <h4 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Estimation</h4>
+                <input 
+                  type="number"
+                  placeholder="Story points (e.g. 5)"
+                  value={storyPoints}
+                  onChange={(e) => setStoryPoints(e.target.value)}
+                  onBlur={() => handleSaveDetails('storyPoints')}
+                  className="w-full text-sm font-medium px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 focus:outline-none focus:border-black"
+                />
               </div>
 
               {/* State / Column */}

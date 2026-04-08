@@ -27,20 +27,33 @@ router.get('/me', async (req, res) => {
 });
 
 // Create Task
-router.post('/', async (req, res) => {
   try {
-    const { title, color, columnId, priority, deadline, assigneeId } = req.body;
+    const { title, color, columnId, priority, deadline, assigneeId, type, storyPoints } = req.body;
     
     const count = await prisma.task.count({ where: { columnId } });
 
+    // Generate Task ID (Key)
+    const column = await prisma.column.findUnique({ where: { id: columnId }, include: { project: true } });
+    const project = column ? column.project : null;
+    let taskKey = "QT-1";
+    if (project) {
+        const newTaskCount = project.taskCount + 1;
+        await prisma.project.update({ where: { id: project.id }, data: { taskCount: newTaskCount } });
+        taskKey = `${project.key || 'QT'}-${newTaskCount}`;
+    }
+
     const taskData = {
+      taskKey,
       title,
+      type: type || 'Task',
+      storyPoints: storyPoints || null,
       color: color || 'white',
       columnId,
       order: count,
       priority: priority || 'Medium',
       deadline: deadline ? new Date(deadline) : null,
-      assigneeId: assigneeId || req.user.id
+      assigneeId: assigneeId || req.user.id,
+      reporterId: req.user.id
     };
 
     const task = await prisma.task.create({
@@ -64,6 +77,10 @@ router.post('/', async (req, res) => {
 
     const firstAssignee = task.assignee || task.assignees?.[0]?.user;
     const formattedTask = {
+      taskKey: task.taskKey,
+      type: task.type,
+      storyPoints: task.storyPoints,
+      reporterId: task.reporterId,
       id: task.id,
       title: task.title,
       description: task.description,
@@ -92,7 +109,7 @@ router.post('/', async (req, res) => {
 router.put('/:taskId', async (req, res) => {
   try {
     const { taskId } = req.params;
-    const { description, priority, deadline, assigneeId } = req.body;
+    const { description, priority, deadline, assigneeId, type, storyPoints } = req.body;
 
     const updateData = {};
     if (description !== undefined) updateData.description = description;
@@ -100,6 +117,8 @@ router.put('/:taskId', async (req, res) => {
     if (deadline !== undefined) updateData.deadline = deadline ? new Date(deadline) : null;
     if (deadline === null) updateData.deadline = null;
     if (assigneeId !== undefined) updateData.assigneeId = assigneeId;
+    if (type !== undefined) updateData.type = type;
+    if (storyPoints !== undefined) updateData.storyPoints = storyPoints;
 
     const existingTask = await prisma.task.findUnique({ where: { id: taskId } });
     

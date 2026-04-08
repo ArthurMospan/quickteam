@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import { MoreHorizontal, Plus } from 'lucide-react';
 import TaskCard from './TaskCard.jsx';
 
-export default function Column({ column, tasks, onDragOver, onDrop, onDragStart, onTaskClick, onRename, onDelete, onAddTask, isOwner = false }) {
+export default function Column({ column, tasks, onDragOver, onDrop, onDragStart, onTaskClick, onRename, onDelete, onAddTask, isOwner = false, wipLimit }) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(column.title);
   const [showMenu, setShowMenu] = useState(false);
   const [showTaskInput, setShowTaskInput] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
+  const isOverLimit = wipLimit && tasks.length > wipLimit;
+
   return (
     <div 
-      className="w-[280px] flex flex-col gap-3"
+      className={`w-[280px] flex flex-col gap-3 p-2 rounded-2xl transition-colors ${isOverLimit ? 'bg-red-50/50 border border-red-100' : ''}`}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e, column.id)}
     >
-      <div className="flex justify-between items-center px-1 mb-1 relative">
+        <div className="flex justify-between items-center px-1 mb-1 relative">
         {isEditing ? (
           <input 
             type="text"
@@ -28,7 +30,7 @@ export default function Column({ column, tasks, onDragOver, onDrop, onDragStart,
           />
         ) : (
           <h2 className="font-bold text-gray-600 flex items-center gap-2 px-1 text-[13px] uppercase tracking-wider">
-            {column.title} <span className="text-gray-400 font-medium text-xs bg-gray-100 px-2 py-0.5 rounded-full normal-case tracking-normal">{tasks.length}</span>
+            {column.title} <span className={`font-medium text-xs px-2 py-0.5 rounded-full normal-case tracking-normal ${isOverLimit ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-400'}`}>{tasks.length}{wipLimit ? ` / ${wipLimit}` : ''}</span>
           </h2>
         )}
         

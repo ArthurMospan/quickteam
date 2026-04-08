@@ -98,12 +98,21 @@ export default function TaskCard({ task, onDragStart, onClick }) {
       </div>
 
       <div className={`transition-opacity duration-300 ${showMenu ? 'opacity-0' : 'opacity-100'}`}>
-        {/* Top row: priority + kebab */}
         <div className="flex items-center justify-between mb-3">
-          <span className={`flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold rounded-full uppercase tracking-wider ${cfg.badge}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`}></span>
-            {priority}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[10px] text-gray-500 bg-black/5 px-2 py-0.5 rounded-md tracking-wider">
+              {task.taskKey || 'QT'}
+            </span>
+            <span className={`flex items-center gap-1.5 px-3 py-1 text-[10px] font-extrabold rounded-full uppercase tracking-wider ${cfg.badge}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`}></span>
+              {priority}
+            </span>
+            {task.storyPoints != null && (
+              <span className="flex items-center justify-center w-5 h-5 bg-black/5 text-[10px] font-bold text-black/60 rounded-full" title="Story Points">
+                {task.storyPoints}
+              </span>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             {task.hasBookmark && (
@@ -121,7 +130,8 @@ export default function TaskCard({ task, onDragStart, onClick }) {
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-[16px] leading-tight text-black mb-3 line-clamp-2">
+        <h3 className="font-bold text-[16px] leading-tight text-black mb-3 line-clamp-2" title={task.type}>
+          {task.type === 'Epic' ? '🚀 ' : task.type === 'Bug' ? '🐛 ' : task.type === 'Subtask' ? '📋 ' : ''}
           {task.title}
         </h3>
 

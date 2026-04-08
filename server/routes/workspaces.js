@@ -62,8 +62,10 @@ router.post('/my-projects', async (req, res) => {
       return res.status(400).json({ error: 'No workspace found. Please contact support.' });
     }
 
+    const pKey = name.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 3) || 'QT';
+
     const newProject = await prisma.project.create({
-      data: { name, workspaceId: membership.workspaceId }
+      data: { name, key: pKey, workspaceId: membership.workspaceId }
     });
 
     // Initialize standard Kanban columns
@@ -228,9 +230,12 @@ router.post('/:workspaceId/projects', checkRole(['ADMIN', 'MANAGER']), async (re
       return res.status(403).json({ error: 'Access denied' });
     }
 
+    const pKey = name.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 3) || 'QT';
+
     const newProject = await prisma.project.create({
       data: {
         name,
+        key: pKey,
         workspaceId
       }
     });
