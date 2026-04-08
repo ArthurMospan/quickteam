@@ -25,7 +25,7 @@ export default function App() {
 
   useEffect(() => {
     if (token) {
-      fetch('http://localhost:3000/api/auth/me', {
+      fetch('https://quickteam.onrender.com/api/auth/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {

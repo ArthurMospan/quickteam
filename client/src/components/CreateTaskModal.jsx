@@ -22,7 +22,7 @@ export default function CreateTaskModal({ isOpen, onClose, columns, members = []
   useEffect(() => {
     if (isGlobal && selectedProjectId && token) {
       setLoadingCols(true);
-      fetch(`http://localhost:3000/api/projects/${selectedProjectId}/board`, {
+      fetch(`https://quickteam.onrender.com/api/projects/${selectedProjectId}/board`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
         .then(r => r.json())
